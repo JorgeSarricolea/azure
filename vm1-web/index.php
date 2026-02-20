@@ -170,12 +170,35 @@
         </div>
 
         <div class="card">
-            <h2>Conectividad</h2>
-            <p style="margin-bottom: 15px;">Esta VM puede comunicarse con VM2 a través de la red privada:</p>
+            <h2>Conectividad en Vivo con VM2</h2>
+            <p style="margin-bottom: 15px;">Prueba en tiempo real de comunicación con VM2 (172.16.1.4):</p>
+            <?php
+                $vm2_ip = '172.16.1.4';
+
+                $ping_output = shell_exec("ping -c 3 -W 2 $vm2_ip 2>&1");
+                $ping_ok = strpos($ping_output, 'bytes from') !== false;
+            ?>
+            <div class="info-grid" style="margin-bottom: 15px;">
+                <div class="info-item">
+                    <div class="label">Ping ICMP</div>
+                    <div class="value" style="color: <?php echo $ping_ok ? '#90EE90' : '#FF6B6B'; ?>">
+                        <?php echo $ping_ok ? 'EXITOSO' : 'FALLIDO'; ?>
+                    </div>
+                </div>
+                <?php
+                    $http_code = trim(shell_exec("curl -s -o /dev/null -w '%{http_code}' --connect-timeout 3 http://$vm2_ip 2>/dev/null"));
+                    $http_ok = $http_code === '200';
+                ?>
+                <div class="info-item">
+                    <div class="label">HTTP (Puerto 80)</div>
+                    <div class="value" style="color: <?php echo $http_ok ? '#90EE90' : '#FF6B6B'; ?>">
+                        <?php echo $http_ok ? "EXITOSO (HTTP $http_code)" : "FALLIDO (HTTP $http_code)"; ?>
+                    </div>
+                </div>
+            </div>
             <div class="network-diagram">
-$ ping 172.16.1.4
-PING 172.16.1.4 (172.16.1.4) 56(84) bytes of data.
-64 bytes from 172.16.1.4: icmp_seq=1 ttl=64 time=1.08 ms
+<strong>$ ping -c 3 <?php echo $vm2_ip; ?></strong>
+<?php echo htmlspecialchars(trim($ping_output)); ?>
             </div>
         </div>
 

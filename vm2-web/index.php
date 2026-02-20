@@ -219,15 +219,35 @@
         </div>
 
         <div class="card">
-            <h2>Conectividad con VM1</h2>
-            <p style="margin-bottom: 15px;">Comunicación exitosa entre subnets a través de la VNet:</p>
-            <div class="network-diagram">
-$ ping 172.16.0.4
-PING 172.16.0.4 (172.16.0.4) 56(84) bytes of data.
-64 bytes from 172.16.0.4: icmp_seq=1 ttl=64 time=0.98 ms
+            <h2>Conectividad en Vivo con VM1</h2>
+            <p style="margin-bottom: 15px;">Prueba en tiempo real de comunicación con VM1 (172.16.0.4):</p>
+            <?php
+                $vm1_ip = '172.16.0.4';
 
-# Las VMs se comunican usando IPs privadas
-# El tráfico no sale a Internet (más seguro y rápido)
+                $ping_output = shell_exec("ping -c 3 -W 2 $vm1_ip 2>&1");
+                $ping_ok = strpos($ping_output, 'bytes from') !== false;
+            ?>
+            <div class="info-grid" style="margin-bottom: 15px;">
+                <div class="info-item">
+                    <div class="label">Ping ICMP</div>
+                    <div class="value" style="color: <?php echo $ping_ok ? '#98FB98' : '#FF6B6B'; ?>">
+                        <?php echo $ping_ok ? 'EXITOSO' : 'FALLIDO'; ?>
+                    </div>
+                </div>
+                <?php
+                    $http_code = trim(shell_exec("curl -s -o /dev/null -w '%{http_code}' --connect-timeout 3 http://$vm1_ip 2>/dev/null"));
+                    $http_ok = $http_code === '200';
+                ?>
+                <div class="info-item">
+                    <div class="label">HTTP (Puerto 80)</div>
+                    <div class="value" style="color: <?php echo $http_ok ? '#98FB98' : '#FF6B6B'; ?>">
+                        <?php echo $http_ok ? "EXITOSO (HTTP $http_code)" : "FALLIDO (HTTP $http_code)"; ?>
+                    </div>
+                </div>
+            </div>
+            <div class="network-diagram">
+<strong>$ ping -c 3 <?php echo $vm1_ip; ?></strong>
+<?php echo htmlspecialchars(trim($ping_output)); ?>
             </div>
         </div>
 
