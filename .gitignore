@@ -1,5 +1,5 @@
 # Archivos con credenciales - NO SUBIR
-config.sh
+scripts/config.sh
 
 # Archivos del sistema
 .DS_Store

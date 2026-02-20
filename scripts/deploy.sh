@@ -2,6 +2,7 @@
 
 # Load configuration
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_DIR="$(dirname "$SCRIPT_DIR")"
 source "$SCRIPT_DIR/config.sh"
 
 # Select VM (default: VM1)
@@ -11,12 +12,12 @@ case "$VM_SELECT" in
     1|vm1)
         TARGET_IP="$VM1_IP"
         TARGET_NAME="$VM1_NAME"
-        WEB_DIR="$SCRIPT_DIR/vm1-web"
+        WEB_DIR="$PROJECT_DIR/vm1-web"
         ;;
     2|vm2)
         TARGET_IP="$VM2_IP"
         TARGET_NAME="$VM2_NAME"
-        WEB_DIR="$SCRIPT_DIR/vm2-web"
+        WEB_DIR="$PROJECT_DIR/vm2-web"
         ;;
     all|both)
         echo "=== Deploying to both VMs ==="

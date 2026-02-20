@@ -7,11 +7,11 @@ Proyecto de práctica para crear y administrar máquinas virtuales en Azure con 
 1. Clona el repositorio
 2. Copia el archivo de configuración:
    ```bash
-   cp config.sh.example config.sh
+   cp scripts/config.sh.example scripts/config.sh
    ```
-3. Edita `config.sh` con tus credenciales reales
+3. Edita `scripts/config.sh` con tus credenciales reales
 
-> ⚠️ **Importante:** `config.sh` contiene credenciales y está en `.gitignore`. Nunca subas este archivo.
+> ⚠️ **Importante:** `scripts/config.sh` contiene credenciales y está en `.gitignore`. Nunca subas este archivo.
 
 ## Arquitectura
 
@@ -70,42 +70,33 @@ Todos los scripts soportan selección de VM con argumentos: `1`, `2`, o `all`
 
 ## Uso Rápido
 
-### Encender las VMs
-```bash
-./start-vm.sh          # Ambas VMs
-./start-vm.sh 1        # Solo VM1
-./start-vm.sh 2        # Solo VM2
-```
+Usa el script principal `azure.sh` desde la raíz del proyecto:
 
-### Verificar estado
 ```bash
-./check-vm.sh          # Ambas VMs
-./check-vm.sh 1        # Solo VM1
-```
+# Encender VMs
+./azure.sh start          # Ambas VMs
+./azure.sh start 1        # Solo VM1
 
-### Conectar por SSH
-```bash
-./connect-vm.sh 1      # VM1 (default)
-./connect-vm.sh 2      # VM2
-```
+# Verificar estado
+./azure.sh check          # Ambas VMs
 
-### Desplegar cambios web
-```bash
-# Editar archivos en welcome-page/
-./deploy.sh            # Solo VM1 (default)
-./deploy.sh all        # Ambas VMs
-```
+# Conectar por SSH
+./azure.sh ssh 1          # VM1
+./azure.sh ssh 2          # VM2
 
-### Instalar Apache + PHP
-```bash
-./install-lamp.sh 2    # Instalar en VM2
-./install-lamp.sh all  # Ambas VMs
-```
+# Desplegar cambios web
+./azure.sh deploy         # VM1
+./azure.sh deploy all     # Ambas VMs
 
-### Apagar VMs (ahorra costos)
-```bash
-./stop-vm.sh           # Ambas VMs
-./stop-vm.sh 1         # Solo VM1
+# Instalar Apache + PHP
+./azure.sh install 2      # VM2
+./azure.sh install all    # Ambas
+
+# Apagar VMs (ahorra costos)
+./azure.sh stop           # Ambas VMs
+
+# Ver ayuda
+./azure.sh help
 ```
 
 ## Comandos Azure CLI Utilizados
@@ -261,21 +252,24 @@ En tu repositorio de GitHub, ve a **Settings > Secrets and variables > Actions**
 azure/
 ├── .github/
 │   └── workflows/
-│       └── deploy.yml     # GitHub Actions para deploy automático
-├── .gitignore             # Excluye config.sh
-├── README.md              # Esta documentación
-├── config.sh              # ⚠️ NO SUBIR - Credenciales reales
-├── config.sh.example      # Template de configuración
-├── vm1-web/               # Sitio web para VM1 (morado)
+│       └── deploy.yml        # GitHub Actions para deploy automático
+├── scripts/                  # Scripts de administración
+│   ├── config.sh             # ⚠️ NO SUBIR - Credenciales reales
+│   ├── config.sh.example     # Template de configuración
+│   ├── start-vm.sh           # Encender VMs
+│   ├── stop-vm.sh            # Apagar VMs
+│   ├── check-vm.sh           # Verificar estado
+│   ├── connect-vm.sh         # Conexión SSH
+│   ├── deploy.sh             # Subir archivos web
+│   ├── install-lamp.sh       # Instalar Apache + PHP
+│   ├── static-ip.sh          # Configurar IP estática
+│   └── test-php.sh           # Probar páginas
+├── vm1-web/                  # Sitio web VM1 (morado)
 │   └── index.php
-├── vm2-web/               # Sitio web para VM2 (verde)
+├── vm2-web/                  # Sitio web VM2 (verde)
 │   └── index.php
-├── check-vm.sh            # Verificar estado de VMs
-├── connect-vm.sh          # Conexión SSH a VMs
-├── deploy.sh              # Subir archivos a VMs (local)
-├── install-lamp.sh        # Instalar Apache + PHP
-├── start-vm.sh            # Encender VMs
-├── stop-vm.sh             # Apagar VMs
-├── static-ip.sh           # Configurar IP estática
-└── test-php.sh            # Probar páginas PHP
+├── index.html                # Página del App Service
+├── azure.sh                  # Script principal (punto de entrada)
+├── .gitignore
+└── README.md
 ```
