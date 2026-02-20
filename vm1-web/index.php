@@ -183,6 +183,7 @@ PING 172.16.1.4 (172.16.1.4) 56(84) bytes of data.
             <p>Fecha: <?php echo date('d/m/Y H:i:s'); ?></p>
             <p style="margin-top: 10px;">Desarrollado por <strong>Jorge Sarricolea</strong></p>
             <p>Instituto Tecnológico de Mérida - Azure Lab</p>
+            <p style="margin-top: 5px; font-size: 0.8em;">✅ Deployed via GitHub Actions</p>
         </div>
     </div>
 </body>
