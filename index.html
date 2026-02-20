@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Azure Lab - Jorge Sarricolea</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Segoe UI', Arial, sans-serif; 
+            background: linear-gradient(135deg, #0078d4 0%, #00bcf2 100%); 
+            color: white; 
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container { 
+            max-width: 900px; 
+            margin: 0 auto;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-top: 20px;
+        }
+        .azure-badge { 
+            background: rgba(255,255,255,0.2); 
+            padding: 8px 20px; 
+            border-radius: 25px; 
+            font-size: 0.9em; 
+            display: inline-block;
+            margin-bottom: 15px;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+        h1 { font-size: 2.8em; margin-bottom: 10px; }
+        .subtitle { opacity: 0.9; font-size: 1.2em; }
+        
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .card {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid rgba(255,255,255,0.2);
+            transition: transform 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        .card h2 {
+            font-size: 1.3em;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .card p {
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+        .card .icon {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        
+        .vm-links {
+            background: rgba(0,0,0,0.2);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 15px;
+        }
+        .vm-links a {
+            color: #90EE90;
+            text-decoration: none;
+            display: block;
+            padding: 8px 0;
+        }
+        .vm-links a:hover {
+            text-decoration: underline;
+        }
+        
+        .architecture {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid rgba(255,255,255,0.2);
+            margin-bottom: 30px;
+        }
+        .architecture h2 {
+            margin-bottom: 20px;
+        }
+        .architecture pre {
+            background: rgba(0,0,0,0.3);
+            padding: 20px;
+            border-radius: 10px;
+            font-family: 'Consolas', monospace;
+            font-size: 0.9em;
+            line-height: 1.6;
+            overflow-x: auto;
+        }
+        .highlight { color: #FFD700; }
+        
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            padding: 20px;
+            opacity: 0.8;
+            font-size: 0.95em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <span class="azure-badge">☁️ Azure App Service</span>
+            <h1>Azure Lab</h1>
+            <p class="subtitle">Práctica de Redes y Servicios en la Nube</p>
+        </div>
+
+        <div class="cards">
+            <div class="card">
+                <div class="icon">🖥️</div>
+                <h2>Máquinas Virtuales</h2>
+                <p>2 VMs Ubuntu en subnets separadas que se comunican entre sí a través de la VNet.</p>
+                <div class="vm-links">
+                    <a href="http://40.75.72.35" target="_blank">→ VM1: Servidor Principal (172.16.0.4)</a>
+                    <a href="http://20.96.33.225" target="_blank">→ VM2: Servidor Secundario (172.16.1.4)</a>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="icon">🌐</div>
+                <h2>App Service</h2>
+                <p>Esta página está hospedada en Azure App Service, desplegada automáticamente desde GitHub.</p>
+                <div class="vm-links">
+                    <p style="color: #90EE90;">✅ Despliegue continuo activo</p>
+                    <p>Runtime: Node.js 20 LTS</p>
+                    <p>Región: Central US</p>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="icon">🔗</div>
+                <h2>Red Virtual (VNet)</h2>
+                <p>Configuración de red con múltiples subnets y reglas NSG para controlar el tráfico.</p>
+                <div class="vm-links">
+                    <p>VNet: 172.16.0.0/16</p>
+                    <p>Subnet 1: 172.16.0.0/24</p>
+                    <p>Subnet 2: 172.16.1.0/24</p>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="icon">🚀</div>
+                <h2>CI/CD con GitHub</h2>
+                <p>Integración continua con GitHub Actions para despliegue automático en VMs y App Service.</p>
+                <div class="vm-links">
+                    <a href="https://github.com/JorgeSarricolea/azure" target="_blank">→ Ver repositorio en GitHub</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="architecture">
+            <h2>📊 Arquitectura del Proyecto</h2>
+            <pre>
+<span class="highlight">Azure Subscription</span> (Azure for Students - TECNM Mérida)
+│
+├── <span class="highlight">Resource Group:</span> G-PRACTICA-VMS-01
+│   │
+│   ├── <span class="highlight">VNet:</span> vnet-eastus2 (172.16.0.0/16) - East US 2
+│   │   ├── Subnet 1 (172.16.0.0/24) → VM1
+│   │   └── Subnet 2 (172.16.1.0/24) → VM2
+│   │
+│   ├── <span class="highlight">VM1:</span> VM-Windows-Practica-01 (Ubuntu 24.04)
+│   │   └── Apache + PHP 8.3
+│   │
+│   ├── <span class="highlight">VM2:</span> VM-Practica-02 (Ubuntu 24.04)
+│   │   └── Apache + PHP 8.3
+│   │
+│   └── <span class="highlight">App Service:</span> webapp-jorge-sarricolea
+│       └── Node.js 20 LTS (Central US)
+            </pre>
+        </div>
+
+        <div class="footer">
+            <p>Desarrollado por <strong>Jorge Sarricolea</strong></p>
+            <p>Instituto Tecnológico de Mérida - Azure Lab 2026</p>
+        </div>
+    </div>
+</body>
+</html>
