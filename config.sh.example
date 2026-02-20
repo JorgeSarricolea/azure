@@ -1,0 +1,32 @@
+#!/bin/bash
+
+# ============================================
+# Azure VMs Configuration
+# ============================================
+# INSTRUCCIONES:
+# 1. Copia este archivo: cp config.sh.example config.sh
+# 2. Edita config.sh con tus valores reales
+# 3. config.sh está en .gitignore (no se sube a GitHub)
+# ============================================
+
+export RESOURCE_GROUP="tu-resource-group"
+
+# VM 1 - Principal
+export VM1_NAME="nombre-vm1"
+export VM1_IP="0.0.0.0"
+export VM1_PRIVATE_IP="172.16.0.4"
+export VM1_SUBNET="subnet-1"
+
+# VM 2 - Secundaria
+export VM2_NAME="nombre-vm2"
+export VM2_IP="0.0.0.0"
+export VM2_PRIVATE_IP="172.16.1.4"
+export VM2_SUBNET="subnet-2"
+
+# Credenciales (compartidas)
+export VM_USER="tu-usuario"
+export VM_PASSWORD="tu-password-seguro"
+
+# Red
+export VNET_NAME="tu-vnet"
+export LOCATION="eastus2"

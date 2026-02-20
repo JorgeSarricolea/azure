@@ -1,0 +1,42 @@
+name: Deploy to Azure VMs
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'vm1-web/**'
+      - 'vm2-web/**'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install sshpass
+        run: sudo apt-get install -y sshpass
+
+      - name: Deploy to VM1
+        if: ${{ hashFiles('vm1-web/**') != '' }}
+        env:
+          VM_IP: ${{ secrets.VM1_IP }}
+          VM_USER: ${{ secrets.VM_USER }}
+          VM_PASSWORD: ${{ secrets.VM_PASSWORD }}
+        run: |
+          sshpass -p "$VM_PASSWORD" scp -o StrictHostKeyChecking=no -r vm1-web/* $VM_USER@$VM_IP:/tmp/
+          sshpass -p "$VM_PASSWORD" ssh -o StrictHostKeyChecking=no $VM_USER@$VM_IP 'sudo cp -r /tmp/*.php /tmp/*.html /tmp/*.css /tmp/*.js /var/www/html/ 2>/dev/null; sudo rm -f /tmp/*.php /tmp/*.html /tmp/*.css /tmp/*.js 2>/dev/null'
+          echo "✅ VM1 deployed: http://$VM_IP"
+
+      - name: Deploy to VM2
+        if: ${{ hashFiles('vm2-web/**') != '' }}
+        env:
+          VM_IP: ${{ secrets.VM2_IP }}
+          VM_USER: ${{ secrets.VM_USER }}
+          VM_PASSWORD: ${{ secrets.VM_PASSWORD }}
+        run: |
+          sshpass -p "$VM_PASSWORD" scp -o StrictHostKeyChecking=no -r vm2-web/* $VM_USER@$VM_IP:/tmp/
+          sshpass -p "$VM_PASSWORD" ssh -o StrictHostKeyChecking=no $VM_USER@$VM_IP 'sudo cp -r /tmp/*.php /tmp/*.html /tmp/*.css /tmp/*.js /var/www/html/ 2>/dev/null; sudo rm -f /tmp/*.php /tmp/*.html /tmp/*.css /tmp/*.js 2>/dev/null'
+          echo "✅ VM2 deployed: http://$VM_IP"
